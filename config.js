@@ -1,4 +1,4 @@
 module.exports = {
-  basePath: '/api/transfers',
-  baseUrl: 'https://my.transfergo.com'
+  baseUrl: 'https://my.transfergo.com/',
+  basePath: 'api/transfers/',
 }
