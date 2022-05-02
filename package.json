@@ -4,8 +4,7 @@
   "description": "Functional and non-functional tests of TransferGo transfers quote",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./specs --reporter mochawesome",
-    "lint": "eslint --fix --ext .js,.jsx ."
+    "test": "mocha ./specs --reporter mochawesome"
   },
   "keywords": [
     "api",
