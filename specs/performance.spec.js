@@ -1,17 +1,19 @@
 const pactum = require('pactum');
-const { expect } = require('chai');
-const { getStandardQuote } = require('../testData/quoteData');
-const { quoteFullUrl } = require('../utils/urls');
+const {getStandardQuote} = require('../testData/quoteData');
+const {quoteFullUrl} = require('../utils/urls');
+const {OK} = require('http-status-codes');
+
+const expectedMaxResponseTime = 200;
 
 describe('Performance tests of quote ', () => {
   it('should responds below 200ms', async () => {
     const quote = getStandardQuote()
-      .build();
+        .build();
 
     await pactum.spec()
-      .get(quoteFullUrl)
-      .withQueryParams(quote)
-      .expectStatus(200)
-      .expectResponseTime(200);
+        .get(quoteFullUrl)
+        .withQueryParams(quote)
+        .expectStatus(OK)
+        .expectResponseTime(expectedMaxResponseTime);
   });
 });

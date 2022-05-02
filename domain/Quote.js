@@ -9,4 +9,4 @@ class Quote {
   }
 }
 
-module.exports = { Quote };
+module.exports = {Quote};
