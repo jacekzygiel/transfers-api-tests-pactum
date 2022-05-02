@@ -14,7 +14,7 @@ E2E tests for TransferGo Transfers API
   * npm
   * Installed npm packages `npm install`
 
-## Project structer
+## Project structure
   * **domain** contains Quote and QuoteBuilder classes. Use QuoteBuilder to prepare data for query to transfers api
   * **specs** contains test specs divided by tests context
   * **testData** contains standard QuoteBuilder object, which is most commonly used. As per needs can be transferred to Factory to provide more types of objects

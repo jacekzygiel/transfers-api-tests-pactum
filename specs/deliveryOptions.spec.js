@@ -4,8 +4,8 @@ const {getStandardQuote} = require('../testData/quoteData');
 const {quoteFullUrl} = require('../utils/urls');
 const {OK, UNPROCESSABLE_ENTITY} = require('http-status-codes');
 
-let defaultResponseBody
-let turkishResponseBody
+let defaultResponseBody;
+let turkishResponseBody;
 
 describe('Delivery options', () => {
     context('General tests of delivery options', () => {
@@ -20,14 +20,14 @@ describe('Delivery options', () => {
 
             defaultResponseBody = defaultResponse.json
 
-            const quoteTr = getStandardQuote()
+            const quoteTurkish = getStandardQuote()
                 .setFromCountryCode('TR')
                 .setFromCurrencyCode('TRY')
                 .build();
 
             const turkishResponse = await pactum.spec()
                 .get(quoteFullUrl)
-                .withQueryParams(quoteTr)
+                .withQueryParams(quoteTurkish)
                 .expectStatus(OK);
 
             turkishResponseBody = turkishResponse.json
@@ -49,21 +49,22 @@ describe('Delivery options', () => {
     context('Standard delivery option', () => {
         const deliveryOption = 'standard';
         const paymentOptions = ['bank', 'card'];
-        it('should have correct set of payments options available', async () => {
-            for (const paymentOption of paymentOptions) {
-                {
-                    expect(defaultResponseBody.deliveryOptions.standard.paymentOptions).to.have.property(paymentOption);
-                }
-            }
-        });
-        it('should have correctly calculated receiving amount', async () => {
+        for (const paymentOption of paymentOptions) {
+            it(`should have ${paymentOption} payment option available for ${deliveryOption} delivery option`,
+                async () => {
+                expect(defaultResponseBody.deliveryOptions.standard.paymentOptions).to.have.property(paymentOption);
+            });
+        }
+        it(`should have correctly calculated receiving amount for ${deliveryOption} delivery option`,
+            async () => {
             for (const paymentOption of paymentOptions) {
                 const {receivingAmount, receivingAmountCalculated} =
                     getReceivingAmountAndReceivingAmountCalculated(defaultResponseBody, deliveryOption, paymentOption)
                 expect(receivingAmount).to.be.equal(receivingAmountCalculated)
             }
         });
-        it('should deliveryOption be unavailable if exceeding deliveryOption maxAmount', async () => {
+        it(`should ${deliveryOption} deliveryOption be unavailable if exceeding deliveryOption maxAmount`,
+            async () => {
             let maxAmount = defaultResponseBody.deliveryOptions[deliveryOption].configuration.maxAmount
 
             const quoteWithTooHighAmount = getStandardQuote()
@@ -84,21 +85,22 @@ describe('Delivery options', () => {
         const deliveryOption = 'now';
         const paymentOptions = ['bank', 'card'];
 
-        it('should have correct set of payments options available', async () => {
-            for (const paymentOption of paymentOptions) {
-                {
-                    expect(defaultResponseBody.deliveryOptions.standard.paymentOptions).to.have.property(paymentOption);
-                }
-            }
-        });
-        it('should have correctly calculated receiving amount', async () => {
+        for (const paymentOption of paymentOptions) {
+            it(`should have ${paymentOption} payment option available for ${deliveryOption} delivery option`,
+                async () => {
+                expect(defaultResponseBody.deliveryOptions.standard.paymentOptions).to.have.property(paymentOption);
+            });
+        }
+        it(`should have correctly calculated receiving amount for ${deliveryOption} delivery option`,
+            async () => {
             for (const paymentOption of paymentOptions) {
                 const {receivingAmount, receivingAmountCalculated} =
                     getReceivingAmountAndReceivingAmountCalculated(defaultResponseBody, deliveryOption, paymentOption)
                 expect(receivingAmount).to.be.equal(receivingAmountCalculated)
             }
         });
-        it('should deliveryOption be unavailable if exceeding deliveryOption maxAmount', async () => {
+        it(`should ${deliveryOption} deliveryOption be unavailable if exceeding deliveryOption maxAmount`,
+            async () => {
             let maxAmount = defaultResponseBody.deliveryOptions[deliveryOption].configuration.maxAmount
 
             const quoteWithTooHighAmount = getStandardQuote()
@@ -111,28 +113,30 @@ describe('Delivery options', () => {
                 .expectStatus(OK);
 
             expect(responseBody.deliveryOptions[deliveryOption].availability.isAvailable).to.be.eq(false);
-            expect(responseBody.deliveryOptions[deliveryOption].availability.reason).to.be.eq('AMOUNT_LIMIT_EXCEEDED')
+            expect(responseBody.deliveryOptions[deliveryOption].availability.reason)
+                .to.be.eq('AMOUNT_LIMIT_EXCEEDED')
 
         });
     })
     context('Today delivery option', () => {
         const deliveryOption = 'today';
         const paymentOptions = ['bank'];
-        it('should have correct set of payments options available', async () => {
-            for (const paymentOption of paymentOptions) {
-                {
+        for (const paymentOption of paymentOptions) {
+            it(`should have ${paymentOption} payment option available for ${deliveryOption} delivery option`,
+                async () => {
                     expect(turkishResponseBody.deliveryOptions.standard.paymentOptions).to.have.property(paymentOption);
-                }
-            }
-        });
-        it('should have correctly calculated receiving amount', async () => {
+            });
+        }
+        it(`should have correctly calculated receiving amount for ${deliveryOption} delivery option`,
+            async () => {
             for (const paymentOption of paymentOptions) {
                 const {receivingAmount, receivingAmountCalculated} =
                     getReceivingAmountAndReceivingAmountCalculated(turkishResponseBody, deliveryOption, paymentOption)
                 expect(receivingAmount).to.be.equal(receivingAmountCalculated)
             }
         });
-        it('should deliveryOption be unavailable if exceeding deliveryOption maxAmount', async () => {
+        it(`should ${deliveryOption} deliveryOption be unavailable if exceeding deliveryOption maxAmount`,
+            async () => {
             let maxAmount = turkishResponseBody.deliveryOptions[deliveryOption].configuration.maxAmount
 
             const quoteWithTooHighAmount = getStandardQuote()
